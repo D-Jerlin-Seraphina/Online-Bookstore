@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import type { Book } from '../types.ts';
 import { useCart } from '../hooks/useCart.ts';
+import { normalizeImageSrc } from '../utils/image.ts';
 
 interface BookCardProps {
   book: Book;
@@ -8,11 +9,20 @@ interface BookCardProps {
 
 export const BookCard = ({ book }: BookCardProps) => {
   const { addToCart } = useCart();
+  const coverSrc = normalizeImageSrc(book.coverImage);
 
   return (
     <div className="flex flex-col rounded-lg border border-slate-200 bg-white p-4 shadow-sm">
       <div className="flex-1">
-        <div className="h-48 rounded-md bg-slate-100" aria-hidden />
+        {coverSrc ? (
+          <img
+            src={coverSrc}
+            alt={`${book.title} cover`}
+            className="h-48 w-full rounded-md object-cover"
+          />
+        ) : (
+          <div className="h-48 rounded-md bg-slate-100" aria-hidden />
+        )}
         <h3 className="mt-4 text-lg font-semibold text-slate-900">{book.title}</h3>
         <p className="text-sm text-slate-500">{book.author}</p>
         <p className="mt-2 line-clamp-3 text-sm text-slate-600">{book.summary}</p>

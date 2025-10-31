@@ -14,3 +14,10 @@ export const fileToDataUrl = (file: File): Promise<string> =>
 		};
 		reader.readAsDataURL(file);
 	});
+
+export const normalizeImageSrc = (image?: string | null) => {
+	if (!image) return '';
+	const trimmed = image.trim();
+	if (!trimmed) return '';
+	return trimmed.startsWith('data:') ? trimmed : `data:image/jpeg;base64,${trimmed}`;
+};

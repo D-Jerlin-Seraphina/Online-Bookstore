@@ -6,6 +6,7 @@ import { useCart } from '../hooks/useCart.ts';
 import { useAuth } from '../hooks/useAuth.ts';
 import { RecommendationCarousel } from '../components/RecommendationCarousel.tsx';
 import { LoadingSpinner } from '../components/LoadingSpinner.tsx';
+import { normalizeImageSrc } from '../utils/image.ts';
 
 interface BookResponse {
   book: Book;
@@ -128,10 +129,20 @@ export const BookDetailPage = () => {
   if (error) return <p className="text-center text-red-600">{error}</p>;
   if (!book) return <p className="text-center text-slate-500">Book not found.</p>;
 
+  const coverSrc = normalizeImageSrc(book.coverImage);
+
   return (
     <div className="space-y-10">
       <section className="grid gap-8 rounded-2xl bg-white p-6 shadow-sm md:grid-cols-[1fr_2fr]">
-        <div className="rounded-lg bg-slate-100" aria-hidden />
+        {coverSrc ? (
+          <img
+            src={coverSrc}
+            alt={`${book.title} cover`}
+            className="h-full w-full rounded-lg object-cover"
+          />
+        ) : (
+          <div className="rounded-lg bg-slate-100" aria-hidden />
+        )}
         <div className="space-y-4">
           <p className="text-sm uppercase tracking-wide text-blue-600">{book.genre}</p>
           <h1 className="text-3xl font-semibold text-slate-900">{book.title}</h1>
